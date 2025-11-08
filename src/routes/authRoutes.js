@@ -8,6 +8,7 @@ const generateToken = (userId) => {
   return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: "15d" });
 };
 
+// Register
 router.post("/register", async (req, res) => {
   try {
     const { email, username, password } = req.body;
@@ -63,6 +64,7 @@ router.post("/register", async (req, res) => {
   }
 });
 
+// Login
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
