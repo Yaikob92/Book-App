@@ -8,35 +8,35 @@ const router = express.Router();
 router.post("/", protectRoute, async (req, res) => {
   try {
     const { title, caption, rating, image } = req.body;
+
     if (!image || !title || !caption || !rating) {
       return res.status(400).json({ message: "Please provide all fields" });
     }
 
     // upload the image to cloudinary
     const uploadResponse = await cloudinary.uploader.upload(image);
-    const imageurl = uploadResponse.secure_url;
+    const imageUrl = uploadResponse.secure_url;
 
     // save to the database
-    const newBook = Book({
+    const newBook = new Book({
       title,
       caption,
       rating,
-      image: imageurl,
-      imagePublicId: uploadResponse.public_id,
+      image: imageUrl,
       user: req.user._id,
     });
+
     await newBook.save();
+
     res.status(201).json(newBook);
   } catch (error) {
-    console.log("Error Creatin book", error);
+    console.log("Error creating book", error);
     res.status(500).json({ message: error.message });
   }
 });
 
 // pagination => infinite loop
 router.get("/", protectRoute, async (req, res) => {
-  // example call from react native-front end
-  // const response = await fetch("http://localhost:3000/api/books?page=1&limits=5")
   try {
     const page = req.query.page || 1;
     const limit = req.query.limit || 5;
