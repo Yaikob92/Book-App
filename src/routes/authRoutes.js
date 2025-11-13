@@ -59,7 +59,7 @@ router.post("/register", async (req, res) => {
       },
     });
   } catch (error) {
-    console.log("Error in register route", Error);
+    console.log("Error in register route", error);
     res.status(500).json({ message: "Internal server error" });
   }
 });
